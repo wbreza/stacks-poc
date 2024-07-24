@@ -1,10 +1,10 @@
-param envName string
 param netGroupName string
 param virtualNetworkName string
 param subnetName string
+param suffix string
 
 resource env 'Microsoft.App/managedEnvironments@2024-03-01' = {
-  name: 'cae-${envName}'
+  name: 'cae-${suffix}'
   location: resourceGroup().location
   properties: {
     zoneRedundant: false

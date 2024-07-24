@@ -1,28 +1,36 @@
 targetScope = 'subscription'
 
-param envName string = 'wabrez-stacks-poc'
+param envName string = 'stacks-poc'
 param location string = 'eastus2'
 
+var suffix = uniqueString(envName, subscription().subscriptionId, location)
+var tags = {
+  envName: envName
+}
+
 resource envGroup 'Microsoft.Resources/resourceGroups@2024-03-01' = {
-  name: 'rg-${envName}-env'
+  name: 'rg-${envName}-env-${suffix}'
   location: location
+  tags: tags
 }
 
 resource appGroup 'Microsoft.Resources/resourceGroups@2024-03-01' = {
-  name: 'rg-${envName}-app'
+  name: 'rg-${envName}-app-${suffix}'
   location: location
+  tags: tags
 }
 
 resource netGroup 'Microsoft.Resources/resourceGroups@2024-03-01' = {
-  name: 'rg-${envName}-net'
+  name: 'rg-${envName}-net-${suffix}'
   location: location
+  tags: tags
 }
 
 module net 'net.bicep' = {
   name: 'net'
   scope: netGroup
   params: {
-    envName: envName
+    suffix: suffix
     delegations: [
       {
         name: 'Microsoft.App.environments'
@@ -43,7 +51,7 @@ module env './env.bicep' = {
   name: 'env'
   scope: envGroup
   params: {
-    envName: envName
+    suffix: suffix
     netGroupName: netGroup.name
     subnetName: net.outputs.subnetName
     virtualNetworkName: net.outputs.vnetName
@@ -54,7 +62,7 @@ module app './app.bicep' = {
   name: 'app'
   scope: appGroup
   params: {
-    envName: envName
+    suffix: suffix
     envGroupName: envGroup.name
     containerAppsEnvName: env.outputs.environmentName
   }

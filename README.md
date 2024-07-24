@@ -6,7 +6,7 @@ Complex ARM deployments that performed at the subscription level with multiple r
 
 ## Example
 
-Create an Azure Container App with a virtual network created in a seperate resoruce group:
+Create an Azure Container App with a virtual network created in a separate resource groups:
 
 ### `net` group
 
@@ -41,6 +41,22 @@ In order to determine the correct order for resource group deletion you would ne
 Deployment stacks sit on top of current ARM deployments.
 The deployment stack tracks all the resource groups and resources that exist within the stack.
 All resources can be easily deleted in the proper order by deleting the deployment stack with the `--action-on-unmanage deleteAll` argument.
+
+### Benefits
+
+- Ability to query resources that exist within the deployment stack
+- Ability to delete all resource groups / resources associated with deployment stack with proper ordering
+- Ability to lock resources from modification if desired
+- Ability to choose how resources are handled when stack is deleted
+  - Detach: Leave resources intact but disassociate them from the stack
+  - Delete: Delete resources but detach resource groups
+  - DeleteAll: Delete all resource groups and resources
+- Resources no longer existing in the stack are automatically deleted
+  - Renamed, orphaned or no longer in the bicep
+
+- `azd` will know exactly which resources were created based on its own provisioning
+- `azd` can better support deploying into existing resource groups grouping its resources within a dedicated stack
+- `azd` can easily cleanup/delete resources no matter the complexity of deployment
 
 ## Running this sample
 

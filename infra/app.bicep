@@ -1,9 +1,9 @@
-param envName string
 param envGroupName string
 param containerAppsEnvName string
+param suffix string
 
 resource app 'Microsoft.App/containerApps@2024-03-01' = {
-  name: 'aca-${envName}-app'
+  name: 'aca-app-${suffix}'
   location: resourceGroup().location
   properties: {
     environmentId: env.id

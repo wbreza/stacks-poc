@@ -1,8 +1,8 @@
-param envName string
+param suffix string
 param delegations array = []
 
 resource vnet 'Microsoft.Network/virtualNetworks@2024-01-01' = {
-  name: 'vnet-${envName}'
+  name: 'vnet-${suffix}'
   location: resourceGroup().location
   properties: {
     addressSpace: {
@@ -15,7 +15,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2024-01-01' = {
 
 resource subnet 'Microsoft.Network/virtualNetworks/subnets@2024-01-01' = {
   parent: vnet
-  name: 'subnet-${envName}'
+  name: 'subnet-${suffix}'
   properties: {
     addressPrefix: '10.0.0.0/23'
     delegations: delegations

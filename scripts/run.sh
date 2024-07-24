@@ -5,9 +5,16 @@ deploymentType="stack"
 deploymentMode="create"
 subscriptionId=""
 location="eastus2"
-bicepFilePath="../infra/main.bicep"
-parametersFilePath="../infra/main.bicepparam"
 environmentName=""
+
+# Get the directory of the currently running script
+script_dir=$(dirname "$0")
+
+# Resolve the absolute path of the script directory
+absolute_script_dir=$(realpath "$script_dir")
+
+bicepFilePath=$(realpath "$absolute_script_dir/../infra/main.bicep")
+parametersFilePath=$(realpath "$absolute_script_dir/../infra/main.bicepparam")
 
 # Function to display usage
 usage() {
@@ -51,7 +58,8 @@ createStackDeployment() {
         --parameters envName="$environmentName" \
         --parameters location="$location" \
         --action-on-unmanage deleteAll \
-        --deny-settings-mode none
+        --deny-settings-mode none \
+        --yes
 }
 
 deleteStackDeployment() {
@@ -88,7 +96,7 @@ fi
 # Set the subscription (if not already set)
 az account set --subscription "$subscriptionId"
 
-deploymentName="deploy-${environmentName}"
+deploymentName="stack-${environmentName}"
 
 if [[ "$deploymentMode" == "create" ]]; then
     if [[ "$deploymentType" == "standard" ]]; then
