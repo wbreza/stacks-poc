@@ -60,6 +60,10 @@ All resources can be easily deleted in the proper order by deleting the deployme
 
 ## Running this sample
 
+The following script performs a standard bicep deployment using the `az cli` with 2 different flavors
+- Standard deployment using `az deployment sub create`
+- Stack deployment using `az stack sub create`
+
 Execute the following script `./scripts/run.sh`
 
 - `-n` The environment name added to create unique resources (**Required**)
